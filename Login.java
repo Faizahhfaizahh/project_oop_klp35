@@ -16,7 +16,7 @@ public class Login extends JFrame {
     private void initializeUI() {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1400, 900);
+        setSize(600, 450);
         setLocationRelativeTo(null);
         setResizable(false);
 
