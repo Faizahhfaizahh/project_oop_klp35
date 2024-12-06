@@ -16,7 +16,7 @@ public class Login extends JFrame {
     private void initializeUI() {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(450, 600);
+        setSize(600, 450);
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -25,7 +25,7 @@ public class Login extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon background = new ImageIcon("assets/download.jpg"); // Path ke gambar background
+                ImageIcon background = new ImageIcon("assets/bg.jpg"); // Path ke gambar background
                 g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
             }
         };
