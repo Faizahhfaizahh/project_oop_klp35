@@ -11,108 +11,177 @@ public class Registrasi extends JFrame {
     private JPasswordField passwordField;
     private JPasswordField confirmPasswordField;
 
-    public Registrasi(){
+    public Registrasi() {
         initializeUI();
     }
-
-    
 
     private void initializeUI() {
         setTitle("Registrasi");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(450, 650);
         setLocationRelativeTo(null);
-        setResizable(true);
+        setResizable(false);
 
-        // Main panel with a background color
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(new Color(235, 235, 235));
+        // Main panel with a background image
+        JPanel mainPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon background = new ImageIcon("assets/bg.jpg"); // Ganti path sesuai lokasi gambar
+                g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
+            }
+        };
+        mainPanel.setLayout(new BorderLayout());
 
-        // Create a form panel with a GridBagLayout
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); 
+        // Transparent form panel
+        JPanel formPanel = new JPanel();
+        formPanel.setOpaque(false); // Membuat form transparan agar background terlihat
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 
-        // Set GridBagConstraints for form items
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        // Add fields with labels
+        JLabel titleLabel = createStyledLabel("Registrasi Akun");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Username Field
-        JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        usernameField = new JTextField(20);
-        usernameField.setFont(new Font("Arial", Font.PLAIN, 14));
-        usernameField.setPreferredSize(new Dimension(350, 40)); // Ukuran lebih besar
-        usernameField.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
+        JLabel usernameLabel = createStyledLabel("Username");
+        usernameField = createStyledTextField();
 
-        // Email Field
-        JLabel emailLabel = new JLabel("Email:");
-        emailLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        emailField = new JTextField(20);
-        emailField.setFont(new Font("Arial", Font.PLAIN, 14));
-        emailField.setPreferredSize(new Dimension(350, 40)); // Ukuran lebih besar
-        emailField.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
+        JLabel emailLabel = createStyledLabel("Email");
+        emailField = createStyledTextField();
 
-        // Password Field
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        passwordField = new JPasswordField(20);
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 14));
-        passwordField.setPreferredSize(new Dimension(350, 40)); // Ukuran lebih besar
-        passwordField.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
+        JLabel passwordLabel = createStyledLabel("Password");
+        passwordField = createStyledPasswordField();
 
-        // Confirm Password Field
-        JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
-        confirmPasswordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        confirmPasswordField = new JPasswordField(20);
-        confirmPasswordField.setFont(new Font("Arial", Font.PLAIN, 14));
-        confirmPasswordField.setPreferredSize(new Dimension(350, 40)); // Ukuran lebih besar
-        confirmPasswordField.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
+        JLabel confirmPasswordLabel = createStyledLabel("Confirm Password");
+        confirmPasswordField = createStyledPasswordField();
 
-        // Register Button
-        JButton registerButton = new JButton("Register");
-        registerButton.setFont(new Font("Arial", Font.BOLD, 14));
-        registerButton.setBackground(new Color(70, 130, 180));
-        registerButton.setForeground(Color.WHITE);
-        registerButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
-        // Back to Login Button
-        JButton backButton = new JButton("Back to Login");
-        backButton.setFont(new Font("Arial", Font.PLAIN, 12));
-        backButton.setBackground(new Color(200, 200, 200));
-        backButton.setForeground(Color.BLACK);
-        backButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
-        // Register Button Action
+        // Buttons
+        JButton registerButton = createStyledButton("Register", new Color(50, 150, 250), Color.WHITE);
         registerButton.addActionListener(this::handleRegistration);
 
-        // Back Button Action
+        JButton backButton = createStyledButton("Back to Login", new Color(200, 200, 200), Color.BLACK);
         backButton.addActionListener(e -> {
             dispose(); // Close registration form
             new Login().setVisible(true); // Open login form
         });
 
-        // Add components to formPanel using GridBagConstraints
-        gbc.gridx = 0; gbc.gridy = 0; formPanel.add(usernameLabel, gbc);
-        gbc.gridx = 1; formPanel.add(usernameField, gbc);
+        // Add components to the formPanel
+        formPanel.add(titleLabel);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
+        formPanel.add(usernameLabel);
+        formPanel.add(usernameField);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(emailLabel);
+        formPanel.add(emailField);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(passwordLabel);
+        formPanel.add(passwordField);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(confirmPasswordLabel);
+        formPanel.add(confirmPasswordField);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        formPanel.add(registerButton);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        formPanel.add(backButton);
 
-        gbc.gridx = 0; gbc.gridy = 1; formPanel.add(emailLabel, gbc);
-        gbc.gridx = 1; formPanel.add(emailField, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2; formPanel.add(passwordLabel, gbc);
-        gbc.gridx = 1; formPanel.add(passwordField, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3; formPanel.add(confirmPasswordLabel, gbc);
-        gbc.gridx = 1; formPanel.add(confirmPasswordField, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
-        formPanel.add(registerButton, gbc);
-
-        gbc.gridy = 5; formPanel.add(backButton, gbc);
-
-        // Add formPanel to the mainPanel
+        // Add formPanel to mainPanel
         mainPanel.add(formPanel, BorderLayout.CENTER);
         add(mainPanel);
+    }
+
+    private JLabel createStyledLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setForeground(Color.WHITE); // Teks putih agar terlihat pada background
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return label;
+    }
+
+    private JTextField createStyledTextField() {
+        JTextField field = new JTextField();
+        field.setFont(new Font("Arial", Font.PLAIN, 14));
+        field.setPreferredSize(new Dimension(350, 40));
+        field.setMaximumSize(new Dimension(350, 40));
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        return field;
+    }
+
+    private JPasswordField createStyledPasswordField() {
+        JPasswordField field = new JPasswordField();
+        field.setFont(new Font("Arial", Font.PLAIN, 14));
+        field.setPreferredSize(new Dimension(350, 40));
+        field.setMaximumSize(new Dimension(350, 40));
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        return field;
+    }
+
+    private JButton createStyledButton(String text, Color background, Color foreground) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setBackground(background);
+        button.setForeground(foreground);
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(350, 40));
+        button.setMaximumSize(new Dimension(350, 40));
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(background.darker());
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(background);
+            }
+        });
+        return button;
+    }
+
+    private boolean isUsernameTaken(Connection conn, String username) {
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            showError("Error checking username: " + e.getMessage());
+            return true; // Jika terjadi error, anggap username sudah ada
+        }
+    }
+
+    private boolean isEmailTaken(Connection conn, String email) {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            showError("Error checking email: " + e.getMessage());
+            return true; // Jika terjadi error, anggap email sudah terdaftar
+        }
+    }
+
+    private boolean registerUser(Connection conn, String username, String email, String password) {
+        String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, email);
+            pstmt.setString(3, password); // Anda dapat menambahkan hash password di sini
+            return pstmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            showError("Error registering user: " + e.getMessage());
+            return false;
+        }
     }
 
     private void handleRegistration(ActionEvent e) {
@@ -120,6 +189,7 @@ public class Registrasi extends JFrame {
         String email = emailField.getText();
         String password = new String(passwordField.getPassword());
         String confirmPassword = new String(confirmPasswordField.getPassword());
+        
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             showError("Please fill in all fields");
@@ -154,50 +224,15 @@ public class Registrasi extends JFrame {
         }
     }
 
-    private boolean isUsernameTaken(Connection conn, String username) {
-        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next() && rs.getInt(1) > 0;
-            }
-        } catch (Exception e) {
-            showError("Error checking username: " + e.getMessage());
-            return true;
-        }
-    }
-
-    private boolean isEmailTaken(Connection conn, String email) {
-        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, email);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next() && rs.getInt(1) > 0;
-            }
-        } catch (Exception e) {
-            showError("Error checking email: " + e.getMessage());
-            return true;
-        }
-    }
-
-    private boolean registerUser(Connection conn, String username, String email, String password) {
-        String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            pstmt.setString(2, email);
-            pstmt.setString(3, password);
-            return pstmt.executeUpdate() > 0;
-        } catch (Exception e) {
-            showError("Error registering user: " + e.getMessage());
-            return false;
-        }
-    }
-
     private void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private void showSuccess(String message) {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Registrasi().setVisible(true));
     }
 }
