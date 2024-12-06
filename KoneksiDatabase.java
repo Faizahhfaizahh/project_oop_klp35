@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 public class KoneksiDatabase {
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"; 
-    static final String DB_URL = "jdbc:mysql://localhost:3306/slidingnumber"; 
+    static final String DB_URL = "jdbc:mysql://localhost:3306/slidnumber"; 
     static final String USER = "root";
     static final String PASS = "";
 

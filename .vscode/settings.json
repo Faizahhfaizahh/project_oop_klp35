@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\Asus\\Documents\\agil\\semester 5\\PBO\\praktikum\\modul 4\\modul-4-jurnal-syahidagil\\Driver\\mysql-connector-j-9.1.0.jar",
+        "driver/mysql-connector-j-9.1.0.jar"
+    ]
+}
