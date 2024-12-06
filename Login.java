@@ -16,112 +16,96 @@ public class Login extends JFrame {
     private void initializeUI() {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 450);
+        setSize(450, 600);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Main panel with background (optional)
+        // Main panel with background image
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon background = new ImageIcon("assets/bg.jpg");
+                ImageIcon background = new ImageIcon("assets/download.jpg"); // Path ke gambar background
                 g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
             }
         };
         mainPanel.setLayout(new BorderLayout());
 
-        // Form panel
+        // Transparent form panel
         JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridBagLayout());
-        formPanel.setOpaque(false);
+        formPanel.setOpaque(false); // Membuat panel transparan
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(50, 150, 50, 150)); // Padding
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Username with black text
-        JLabel usernameLabel = createStyledLabel("Username:");
-        usernameField = new JTextField(20);
+        JLabel usernameLabel = createStyledLabel("Username");
+        usernameField = new JTextField();
         styleTextField(usernameField);
 
-        // Password with black text
-        JLabel passwordLabel = createStyledLabel("Password:");
-        passwordField = new JPasswordField(20);
+        JLabel passwordLabel = createStyledLabel("Password");
+        passwordField = new JPasswordField();
         styleTextField(passwordField);
 
-        // Add components to form panel
-        gbc.gridx = 0; gbc.gridy = 0;
-        formPanel.add(usernameLabel, gbc);
-        gbc.gridx = 1;
-        formPanel.add(usernameField, gbc);
-        gbc.gridx = 0; gbc.gridy = 1;
-        formPanel.add(passwordLabel, gbc);
-        gbc.gridx = 1;
-        formPanel.add(passwordField, gbc);
+        formPanel.add(usernameLabel);
+        formPanel.add(usernameField);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+        formPanel.add(passwordLabel);
+        formPanel.add(passwordField);
 
-        // Center the form panel
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        centerPanel.setOpaque(false);
-        centerPanel.add(formPanel);
-
-        // Button panel at bottom
+        // Button panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 15));
 
         JButton loginButton = createStyledButton("Login");
         JButton registerButton = createStyledButton("Register");
-        // JButton backButton = createStyledButton("Back to Menu");
 
         loginButton.addActionListener(e -> handleLogin());
         registerButton.addActionListener(e -> handleRegister());
-        // backButton.addActionListener(e -> handleBack());
 
         buttonPanel.add(loginButton);
         buttonPanel.add(registerButton);
-        // buttonPanel.add(backButton);
 
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
+        // Add panels to main panel
+        mainPanel.add(formPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Add main panel to frame
         add(mainPanel);
-
-        formPanel.setBorder(BorderFactory.createEmptyBorder(150, 0, 0, 0));
     }
 
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setForeground(Color.WHITE); // Agar teks terlihat di background gambar
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
 
     private void styleTextField(JTextField field) {
         field.setFont(new Font("Arial", Font.PLAIN, 14));
         field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.BLACK),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
-        field.setPreferredSize(new Dimension(200, 30));
+        field.setMaximumSize(new Dimension(400, 30));
     }
 
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
-        button.setBackground(Color.YELLOW);
-        button.setForeground(Color.BLACK);
+        button.setBackground(new Color(50, 150, 250));
+        button.setForeground(Color.WHITE);
         button.setFocusable(false);
-        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         button.setFont(new Font("Arial", Font.BOLD, 14));
         button.setPreferredSize(new Dimension(120, 40));
 
+        button.setBorder(BorderFactory.createEmptyBorder());
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(255, 255, 150));
+                button.setBackground(new Color(30, 130, 230));
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(Color.YELLOW);
+                button.setBackground(new Color(50, 150, 250));
             }
         });
 
@@ -154,12 +138,6 @@ public class Login extends JFrame {
         dispose();
         new Registrasi().setVisible(true);
     }
-
-    // private void handleBack() {
-    //     dispose();
-    //     // Navigate back to the main menu or previous screen
-    //     // You can implement the main menu or home screen here
-    // }
 
     private boolean authenticateUser(Connection conn, String username, String password) throws SQLException {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
