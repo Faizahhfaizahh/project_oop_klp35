@@ -20,7 +20,8 @@ public class Registrasi extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(450, 650);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setLayout(new BorderLayout());
+        //setResizable(false);
 
         // Main panel with a background image
         JPanel mainPanel = new JPanel() {
@@ -93,7 +94,7 @@ public class Registrasi extends JFrame {
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.BOLD, 14));
-        label.setForeground(Color.WHITE); // Teks putih agar terlihat pada background
+        label.setForeground(Color.BLACK); // Teks putih agar terlihat pada background
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
