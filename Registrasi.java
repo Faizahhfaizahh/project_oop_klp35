@@ -27,7 +27,7 @@ public class Registrasi extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon background = new ImageIcon("assets/bg.jpg"); // Ganti path sesuai lokasi gambar
+                ImageIcon background = new ImageIcon("assets/download.jpg"); // Ganti path sesuai lokasi gambar
                 g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
             }
         };
