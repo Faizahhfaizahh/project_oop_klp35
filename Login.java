@@ -16,16 +16,17 @@ public class Login extends JFrame {
     private void initializeUI() {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 450);
+        setSize(450, 650);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setLayout(new BorderLayout());
+        //setResizable(false);
 
         // Main panel with background image
         JPanel mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon background = new ImageIcon("assets/bg.jpg"); // Path ke gambar background
+                ImageIcon background = new ImageIcon("assets/download.jpg"); // Path ke gambar background
                 g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
             }
         };
@@ -76,7 +77,7 @@ public class Login extends JFrame {
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.BOLD, 16));
-        label.setForeground(Color.WHITE); // Agar teks terlihat di background gambar
+        label.setForeground(Color.BLACK); // Agar teks terlihat di background gambar
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
@@ -115,17 +116,17 @@ public class Login extends JFrame {
     private void handleLogin() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
-
+    
         if (username.isEmpty() || password.isEmpty()) {
             showError("Please fill in all fields");
             return;
         }
-
+    
         try (Connection conn = KoneksiDatabase.getConnection()) {
             if (authenticateUser(conn, username, password)) {
                 showSuccess("Login successful!");
-                dispose();
-                SwingUtilities.invokeLater(() -> new Puzzle().startGame());
+                dispose(); // Menutup frame Login
+                SwingUtilities.invokeLater(() -> new Menu().setVisible(true)); // Buka frame Menu
             } else {
                 showError("Invalid username or password");
             }
