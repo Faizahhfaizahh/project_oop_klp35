@@ -9,9 +9,8 @@ public class Menu extends JFrame {
     private Image backgroundImage;
     public Menu() {
         setTitle("MENU");
-        setSize(450, 650);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setSize(815, 670);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         //setResizable(false);
         setLayout(new BorderLayout());
 
@@ -43,7 +42,15 @@ public class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == play) {
-                    new JFrame("play");
+                JFrame frame = new JFrame();
+                GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.add(puzzle);
+                frame.setTitle("Sliding Number");
+                frame.setResizable(false);
+                // frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+                frame.pack();
                 } else if (e.getSource() == exit) {
                     System.exit(0);
                 }
@@ -105,4 +112,3 @@ public class Menu extends JFrame {
         });
     }
 }
-

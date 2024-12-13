@@ -30,12 +30,15 @@ public class GUISlidingNumber extends JPanel {
     private Logic logic; 
     private KlikPuzzle klik; 
     private ResultSet rs; //Untuk menampung data yang telah diambil dari database 
+    private Score score;
 
     public GUISlidingNumber(int dim, int mar) {
         this.dimension = dim;
         this.margin = mar;
         this.clickNum = 0;
-        setData();
+        highScore = KoneksiDatabase.cekSkor_Tinggi();
+        bestTime = KoneksiDatabase.cekWaktu();
+        
 
         this.gridSize = (dimension - 2 * margin);
         this.tileSize = gridSize / size;
@@ -68,6 +71,9 @@ public class GUISlidingNumber extends JPanel {
                                             new ImageIcon("../img/error.png"));
             } else {
                 newGame(); // Reset the game state
+                stopThread();
+                clickNum = 0;
+                hour=0;minute=0;second=0;
                 repaint(); // Redraw the game UI
             }
         }
@@ -99,10 +105,11 @@ public class GUISlidingNumber extends JPanel {
 
 public void insertData(int skor_tinggi, String waktu) {
     try (Connection conn = KoneksiDatabase.getConnection()) {
-        String sql = "INSERT INTO data (skor_tinggi, waktu) VALUES (?, ?)";
+        String sql = "INSERT INTO data (skor_tinggi, waktu, id) VALUES (?, ?,2)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, skor_tinggi);
             pstmt.setString(2, waktu);
+
             pstmt.executeUpdate();
         }
     } catch (SQLException e) {
@@ -135,12 +142,13 @@ public void insertData(int skor_tinggi, String waktu) {
       public int getClickNum(){
         return this.clickNum;
       }
-      public void setHighScore(int clickNum){
-        setData();
-      }
       public String getTime(){
           String waktu = String.valueOf(hour) + " h " + String.valueOf(minute) + " m " + String.valueOf(second) + " s";
           return waktu;
+      }
+      public void setHighScore(int clickNum){
+        highScore = KoneksiDatabase.cekSkor_Tinggi();
+        bestTime = KoneksiDatabase.cekWaktu();
       }
 
 
@@ -168,22 +176,6 @@ public void insertData(int skor_tinggi, String waktu) {
         drawClickNum(gtd);
     }
   
-      private void setData(){
-        // Retrieve the best time and high score from the database
-        try (Connection conn = KoneksiDatabase.getConnection()) {
-            String query = "SELECT highscore, waktu FROM data ORDER BY highscore DESC LIMIT 1";
-            rs = conn.createStatement().executeQuery(query);
-            if (rs.next()) {
-                highScore = rs.getInt("highscore");
-                bestTime = rs.getString("waktu");
-            } else {
-                highScore = 9999;
-                bestTime = "24 h 59 m 59 s";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void drawGrid(Graphics2D g) {
         for (int i = 0; i < tiles.length; i++) {
@@ -197,6 +189,9 @@ public void insertData(int skor_tinggi, String waktu) {
                 if (gameOver) {
                     g.setColor(FOREGROUND_COLOR);
                     drawCenteredString(g, "Done!", x, y);
+                    String time = (hour +" h " + minute+ " m " +second);
+                    int detik = hour*60*60+minute*60+second;
+                    KoneksiDatabase.setDataMenang(clickNum,time,2,detik);
                 }
                 continue;
             }
@@ -283,6 +278,7 @@ public void insertData(int skor_tinggi, String waktu) {
             tiles[r] = tiles[n];
             tiles[n] = tmp;
         }
+        
     }
 
     //Thread waktu
