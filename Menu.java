@@ -51,6 +51,7 @@ public class Menu extends JFrame {
                 // frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
                 frame.pack();
+                dispose();
                 } else if (e.getSource() == exit) {
                     System.exit(0);
                 }

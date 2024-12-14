@@ -68,7 +68,7 @@ public class GUISlidingNumber extends JPanel {
                                             "Pindahkan posisi kosong ke ujung kanan bawah sebelum mereset!", 
                                             "Tidak bisa reset!", 
                                             JOptionPane.WARNING_MESSAGE,
-                                            new ImageIcon("../img/error.png"));
+                                            new ImageIcon(""));
             } else {
                 newGame(); // Reset the game state
                 stopThread();
@@ -306,7 +306,7 @@ public void insertData(int skor_tinggi, String waktu) {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setTitle("Sliding Number");
         frame.add(puzzle);
         frame.pack();
