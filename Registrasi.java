@@ -92,11 +92,7 @@ public class Registrasi extends JFrame {
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.BOLD, 14));
-<<<<<<< Updated upstream
         label.setForeground(Color.WHITE); // Teks putih agar terlihat pada background
-=======
-        label.setForeground(Color.BLACK); 
->>>>>>> Stashed changes
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
