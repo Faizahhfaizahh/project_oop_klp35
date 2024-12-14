@@ -1,20 +1,6 @@
-// import javax.swing.SwingUtilities;
-
-// public class Puzzle {
-
-//   public void startGame() {
-//     UI uiSliding = new UI(600, 30); 
-//     SwingUtilities.invokeLater(uiSliding);
-    
-// }
-//   public static void main(String[] args) {
-//     SwingUtilities.invokeLater(() -> new Login().setVisible(true));
-//   }
-// }
-
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
-import java.awt.*;
+//import java.awt.*;
 
 public class Puzzle {
     // Reference to the current active frame
@@ -39,10 +25,10 @@ public class Puzzle {
     }
 
     // Method to open Menu screen
-    public void openMenu() {
+    public void openMenu(String username) {
         SwingUtilities.invokeLater(() -> {
             closeCurrentFrame();
-            currentFrame = new Menu();
+            currentFrame = new Menu(username);
             currentFrame.setVisible(true);
         });
     }
@@ -52,7 +38,7 @@ public class Puzzle {
         SwingUtilities.invokeLater(() -> {
             closeCurrentFrame();
             JFrame frame = new JFrame();
-            GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
+            GUISlidingNumber puzzle = new GUISlidingNumber(600, 30, "no user");
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setTitle("Sliding Number");
             frame.add(puzzle);
@@ -75,7 +61,7 @@ public class Puzzle {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Puzzle puzzle = new Puzzle();
-            puzzle.openLogin(); // Start with the login screen
+            puzzle.openLogin(); //Start with the login screen
         });
     }
 }

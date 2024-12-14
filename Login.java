@@ -26,7 +26,7 @@ public class Login extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon background = new ImageIcon("assets/download.jpg"); // Path ke gambar background
+                ImageIcon background = new ImageIcon("assets/bg2.jpeg"); // Path ke gambar background
                 g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
             }
         };
@@ -114,19 +114,20 @@ public class Login extends JFrame {
     }
 
     private void handleLogin() {
-        String username = usernameField.getText();
-        String password = new String(passwordField.getPassword());
-    
-        if (username.isEmpty() || password.isEmpty()) {
+        String inputUsername = usernameField.getText();
+        String inputPassword = new String(passwordField.getPassword());
+
+        if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
             showError("Please fill in all fields");
             return;
         }
-    
+
         try (Connection conn = KoneksiDatabase.getConnection()) {
-            if (authenticateUser(conn, username, password)) {
+            String username = authenticateAndFetchUsername(conn, inputUsername, inputPassword);
+            if (username != null) {
                 showSuccess("Login successful!");
-                dispose(); // Menutup frame Login
-                SwingUtilities.invokeLater(() -> new Puzzle().openMenu()); // Buka frame Menu
+                dispose(); // Close the login frame
+                SwingUtilities.invokeLater(() -> new Puzzle().openMenu(username));
             } else {
                 showError("Invalid username or password");
             }
@@ -140,15 +141,18 @@ public class Login extends JFrame {
         new Registrasi().setVisible(true);
     }
 
-    private boolean authenticateUser(Connection conn, String username, String password) throws SQLException {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+    private String authenticateAndFetchUsername(Connection conn, String inputUsername, String inputPassword) throws SQLException {
+        String sql = "SELECT username FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
-
-            return rs.next(); // Return true if a matching user is found
+            pstmt.setString(1, inputUsername);
+            pstmt.setString(2, inputPassword);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("username"); // Return the username from the database
+                }
+            }
         }
+        return null; // Return null if no match found
     }
 
     private void showError(String message) {
@@ -158,8 +162,4 @@ public class Login extends JFrame {
     private void showSuccess(String message) {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
-
-    // public static void main(String[] args) {
-    //     SwingUtilities.invokeLater(() -> new Login().setVisible(true));
-    // }
 }

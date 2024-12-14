@@ -7,14 +7,17 @@ import java.awt.event.ActionListener;
 
 public class Menu extends JFrame {
     private Image backgroundImage;
-    public Menu() {
+    private String loggedInUsername;
+
+    public Menu(String username) {
+        this.loggedInUsername = username;
         setTitle("MENU");
         setSize(815, 670);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         //setResizable(false);
         setLayout(new BorderLayout());
 
-        backgroundImage = Toolkit.getDefaultToolkit().getImage("assets/bg.jpg");
+        backgroundImage = Toolkit.getDefaultToolkit().getImage("assets/bg2.jpeg");
         JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -25,10 +28,30 @@ public class Menu extends JFrame {
 
         backgroundPanel.setLayout(new BorderLayout());
         backgroundPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 10, 20));
+
+        // Panel untuk header 
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setOpaque(false);
+
         JLabel titleLabel = new JLabel("SLIDING NUMBER", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Bebas Neue", Font.BOLD, 25));
+        titleLabel.setFont(new Font("Bebas Neue", Font.BOLD, 35));
         titleLabel.setForeground(new Color(255, 255, 255));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+        // Panel untuk info user
+        JPanel titleAndUserPanel = new JPanel(new BorderLayout());
+        titleAndUserPanel.setOpaque(false);
+
+        titleAndUserPanel.add(titleLabel, BorderLayout.CENTER);
+
+        // Tambahkan label untuk menampilkan siapa yang login
+        JLabel userLabel = new JLabel("User: " + username, SwingConstants.RIGHT);
+        userLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        userLabel.setForeground(new Color(255, 255, 255));
+        userLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 10, 0));
+        titleAndUserPanel.add(userLabel, BorderLayout.EAST);
+
+        headerPanel.add(titleAndUserPanel, BorderLayout.CENTER); 
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -43,8 +66,9 @@ public class Menu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == play) {
                     new Puzzle().openSlidingNumberGame();
+                    dispose();
                 // JFrame frame = new JFrame();
-                // GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
+                // GUISlidingNumber puzzle = new GUISlidingNumber(600, 30, loggedInUsername);
                 // frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 // frame.add(puzzle);
                 // frame.setTitle("Sliding Number");
@@ -52,7 +76,6 @@ public class Menu extends JFrame {
                 // // frame.setLocationRelativeTo(null);
                 // frame.setVisible(true);
                 // frame.pack();
-                dispose();
                 } else if (e.getSource() == exit) {
                     System.exit(0);
                 }
@@ -68,7 +91,8 @@ public class Menu extends JFrame {
         buttonPanel.add(play);
         buttonPanel.add(exit);
 
-        backgroundPanel.add(titleLabel, BorderLayout.NORTH);
+        //Menambahkan headerPanel dan buttonPanel ke backgroundPanel
+        backgroundPanel.add(headerPanel, BorderLayout.NORTH);
         backgroundPanel.add(buttonPanel, BorderLayout.CENTER);
         add(backgroundPanel, BorderLayout.CENTER);
 }
@@ -106,11 +130,4 @@ public class Menu extends JFrame {
             }
         });
     }
-
-    // public static void main(String[] args) {
-    //     SwingUtilities.invokeLater(() -> {
-    //         Menu homePage = new Menu();
-    //         homePage.setVisible(true);
-    //     });
-    // }
-}
+    }

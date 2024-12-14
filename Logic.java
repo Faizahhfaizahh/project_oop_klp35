@@ -1,7 +1,7 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import javax.swing.JFrame;
+// import java.sql.Connection;
+// //import java.sql.PreparedStatement;
+// import java.sql.ResultSet;
+//import javax.swing.JFrame;
 
 public class Logic {
     // Fumlah tiles yang ada pada game
