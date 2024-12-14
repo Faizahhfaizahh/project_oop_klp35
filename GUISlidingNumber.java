@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-// import java.sql.Time;
 import java.util.Random;
 
 public class GUISlidingNumber extends JPanel {
@@ -29,13 +28,19 @@ public class GUISlidingNumber extends JPanel {
     private boolean stop;
     private Logic logic; 
     private KlikPuzzle klik; 
-    private ResultSet rs; //Untuk menampung data yang telah diambil dari database 
+    //Untuk menampung data yang telah diambil dari database 
+    private ResultSet rs; 
+    private Score score;
+    private String username; 
 
-    public GUISlidingNumber(int dim, int mar) {
+    public GUISlidingNumber(int dim, int mar, String username) {
         this.dimension = dim;
         this.margin = mar;
         this.clickNum = 0;
-        setData();
+        this.username = username;
+        highScore = KoneksiDatabase.cekSkor_Tinggi();
+        bestTime = KoneksiDatabase.cekWaktu();
+        
 
         this.gridSize = (dimension - 2 * margin);
         this.tileSize = gridSize / size;
@@ -61,48 +66,49 @@ public class GUISlidingNumber extends JPanel {
         public void actionPerformed(ActionEvent ae) {
             // Jika tiles yang bernilai 0 tidak di posisi akhir, akan memunculkan warning message
             if (tiles[size * size - 1] != 0) {
+                // Memuat dan mengubah ukuran ikon gambar
+                ImageIcon icon = new ImageIcon("assets/error2.png");
+                Image scaledImage = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH); // Ubah ukuran gambar menjadi 50x50
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
                 JOptionPane.showMessageDialog(null, 
                                             "Pindahkan posisi kosong ke ujung kanan bawah sebelum mereset!", 
                                             "Tidak bisa reset!", 
                                             JOptionPane.WARNING_MESSAGE,
-                                            new ImageIcon("../img/error.png"));
+                                            scaledIcon);
             } else {
-                newGame(); // Reset the game state
-                repaint(); // Redraw the game UI
+                newGame(); 
+                stopThread();
+                clickNum = 0;
+                hour = 0; minute = 0; second = 0;
+                repaint(); 
             }
         }
     });
+
 
     // Tombol kembali
     JButton backButton = new JButton("Back");
     add(backButton);
     backButton.addActionListener(ae -> {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(GUISlidingNumber.this);
-        topFrame.dispose(); // Close the current window
-        SwingUtilities.invokeLater(() -> new Menu().setVisible(true)); // Open the menu
+        topFrame.dispose(); 
+        SwingUtilities.invokeLater(() -> new Menu("No user").setVisible(true)); // Open the menu
     });
 
     // Memulai game
     newGame(); 
 }
 
-// // Method untuk memasukkan data ke dalam database
-// public void insertData(int skor_tinggi, String waktu) {
-//     try {
-//         String sql = "INSERT INTO data (skor_tinggi, waktu) VALUES ('%d', '%s')";
-//         sql = String.format(sql, skor_tinggi, waktu);
-//         execute(sql); // Assume execute method is defined for executing the SQL query
-//     } catch (Exception e) {
-//         e.printStackTrace();
-//     }
-// }
+
 
 public void insertData(int skor_tinggi, String waktu) {
     try (Connection conn = KoneksiDatabase.getConnection()) {
-        String sql = "INSERT INTO data (skor_tinggi, waktu) VALUES (?, ?)";
+        String sql = "INSERT INTO data (skor_tinggi, waktu, id) VALUES (?, ?,2)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, skor_tinggi);
             pstmt.setString(2, waktu);
+
             pstmt.executeUpdate();
         }
     } catch (SQLException e) {
@@ -135,12 +141,13 @@ public void insertData(int skor_tinggi, String waktu) {
       public int getClickNum(){
         return this.clickNum;
       }
-      public void setHighScore(int clickNum){
-        setData();
-      }
       public String getTime(){
           String waktu = String.valueOf(hour) + " h " + String.valueOf(minute) + " m " + String.valueOf(second) + " s";
           return waktu;
+      }
+      public void setHighScore(int clickNum){
+        highScore = KoneksiDatabase.cekSkor_Tinggi();
+        bestTime = KoneksiDatabase.cekWaktu();
       }
 
 
@@ -168,22 +175,6 @@ public void insertData(int skor_tinggi, String waktu) {
         drawClickNum(gtd);
     }
   
-      private void setData(){
-        // Retrieve the best time and high score from the database
-        try (Connection conn = KoneksiDatabase.getConnection()) {
-            String query = "SELECT highscore, waktu FROM data ORDER BY highscore DESC LIMIT 1";
-            rs = conn.createStatement().executeQuery(query);
-            if (rs.next()) {
-                highScore = rs.getInt("highscore");
-                bestTime = rs.getString("waktu");
-            } else {
-                highScore = 9999;
-                bestTime = "24 h 59 m 59 s";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void drawGrid(Graphics2D g) {
         for (int i = 0; i < tiles.length; i++) {
@@ -197,6 +188,9 @@ public void insertData(int skor_tinggi, String waktu) {
                 if (gameOver) {
                     g.setColor(FOREGROUND_COLOR);
                     drawCenteredString(g, "Done!", x, y);
+                    String time = (hour +" h " + minute+ " m " +second);
+                    int detik = hour*60*60+minute*60+second;
+                    KoneksiDatabase.setDataMenang(clickNum,time,2,detik);
                 }
                 continue;
             }
@@ -210,18 +204,6 @@ public void insertData(int skor_tinggi, String waktu) {
             drawCenteredString(g, String.valueOf(tiles[i]), x, y);
         }
     }
-
-    // private void drawStart(Graphics2D g){
-    //     if(gameOver){
-    //       g.setFont(getFont().deriveFont(Font.BOLD, 18));
-    //       g.setColor(FOREGROUND_COLOR);
-    //       String s = "Klik di mana saja untuk memulai game.";
-    //       g.drawString(s, ((getWidth() - g.getFontMetrics().stringWidth(s)) / 2) - 90, 
-    //                     getHeight() - margin + 20);
-    //     //   compareString();
-    //       setData();
-    //     }
-    //   }
 
     private void drawCenteredString(Graphics2D g, String s, int x, int y) {
         FontMetrics fm = g.getFontMetrics();
@@ -283,6 +265,7 @@ public void insertData(int skor_tinggi, String waktu) {
             tiles[r] = tiles[n];
             tiles[n] = tmp;
         }
+        
     }
 
     //Thread waktu
@@ -309,7 +292,7 @@ public void insertData(int skor_tinggi, String waktu) {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
+        GUISlidingNumber puzzle = new GUISlidingNumber(600, 30, "No user");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Sliding Number");
         frame.add(puzzle);

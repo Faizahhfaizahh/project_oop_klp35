@@ -27,7 +27,7 @@ public class Registrasi extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon background = new ImageIcon("assets/download.jpg"); // Ganti path sesuai lokasi gambar
+                ImageIcon background = new ImageIcon("assets/bg2.png"); // Ganti path sesuai lokasi gambar
                 g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
             }
         };
@@ -62,13 +62,13 @@ public class Registrasi extends JFrame {
 
         JButton backButton = createStyledButton("Back to Login", new Color(200, 200, 200), Color.BLACK);
         backButton.addActionListener(e -> {
-            dispose(); // Close registration form
-            new Login().setVisible(true); // Open login form
+            dispose(); 
+            new Login().setVisible(true);
         });
 
         // Add components to the formPanel
         formPanel.add(titleLabel);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
+        formPanel.add(Box.createRigidArea(new Dimension(0, 20))); 
         formPanel.add(usernameLabel);
         formPanel.add(usernameField);
         formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -85,7 +85,6 @@ public class Registrasi extends JFrame {
         formPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         formPanel.add(backButton);
 
-        // Add formPanel to mainPanel
         mainPanel.add(formPanel, BorderLayout.CENTER);
         add(mainPanel);
     }
@@ -93,7 +92,11 @@ public class Registrasi extends JFrame {
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.BOLD, 14));
+<<<<<<< Updated upstream
         label.setForeground(Color.WHITE); // Teks putih agar terlihat pada background
+=======
+        label.setForeground(Color.BLACK); 
+>>>>>>> Stashed changes
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }

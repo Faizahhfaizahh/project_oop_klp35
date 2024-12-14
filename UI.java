@@ -34,7 +34,7 @@ public class UI implements Runnable {
     }
 
     private void setupFrameComponents() {
-        puzzleAngka = new GUISlidingNumber(dimension, margin);
+        puzzleAngka = new GUISlidingNumber(dimension, margin, "No user");
 
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
