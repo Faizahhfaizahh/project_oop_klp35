@@ -126,7 +126,7 @@ public class Login extends JFrame {
             if (authenticateUser(conn, username, password)) {
                 showSuccess("Login successful!");
                 dispose(); // Menutup frame Login
-                SwingUtilities.invokeLater(() -> new Menu().setVisible(true)); // Buka frame Menu
+                SwingUtilities.invokeLater(() -> new Puzzle().openMenu()); // Buka frame Menu
             } else {
                 showError("Invalid username or password");
             }
@@ -159,7 +159,7 @@ public class Login extends JFrame {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Login().setVisible(true));
-    }
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(() -> new Login().setVisible(true));
+    // }
 }

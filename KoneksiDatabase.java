@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class KoneksiDatabase {
+abstract public class KoneksiDatabase {
     private static final String URL = "jdbc:mysql://localhost:3306/slidnumber";
     private static final String usn = "root";
     private static final String pwd = "";

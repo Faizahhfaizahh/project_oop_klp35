@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class UI implements Runnable {
+public class UI extends JFrame implements Runnable {
     private JFrame frame;
     private GUISlidingNumber puzzleAngka;
     private int dimension;
@@ -18,15 +18,14 @@ public class UI implements Runnable {
         frame = createFrame();
         
         // Tambahkan komponen ke frame
-        setupFrameComponents();
-        
+        setupFrameComponents(); 
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
     private JFrame createFrame() {
-        JFrame frame = new JFrame("Sliding Puzzle Game");
+        JFrame frame = new JFrame("Sliding Number");
         frame.setPreferredSize(new Dimension(dimension + 200, dimension + margin));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(true);
@@ -45,4 +44,5 @@ public class UI implements Runnable {
     public JFrame getFrame() {
         return frame;
     }
+
 }

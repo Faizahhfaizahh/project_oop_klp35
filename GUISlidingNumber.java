@@ -303,15 +303,15 @@ public void insertData(int skor_tinggi, String waktu) {
         }
       }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setTitle("Sliding Number");
-        frame.add(puzzle);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
+    // public static void main(String[] args) {
+    //     JFrame frame = new JFrame();
+    //     GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
+    //     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    //     frame.setTitle("Sliding Number");
+    //     frame.add(puzzle);
+    //     frame.pack();
+    //     frame.setResizable(false);
+    //     frame.setLocationRelativeTo(null);
+    //     frame.setVisible(true);
+    // }
 }

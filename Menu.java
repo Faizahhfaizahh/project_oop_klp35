@@ -42,15 +42,16 @@ public class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == play) {
-                JFrame frame = new JFrame();
-                GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.add(puzzle);
-                frame.setTitle("Sliding Number");
-                frame.setResizable(false);
-                // frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-                frame.pack();
+                    new Puzzle().openSlidingNumberGame();
+                // JFrame frame = new JFrame();
+                // GUISlidingNumber puzzle = new GUISlidingNumber(600, 30);
+                // frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                // frame.add(puzzle);
+                // frame.setTitle("Sliding Number");
+                // frame.setResizable(false);
+                // // frame.setLocationRelativeTo(null);
+                // frame.setVisible(true);
+                // frame.pack();
                 dispose();
                 } else if (e.getSource() == exit) {
                     System.exit(0);
@@ -106,10 +107,10 @@ public class Menu extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Menu homePage = new Menu();
-            homePage.setVisible(true);
-        });
-    }
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(() -> {
+    //         Menu homePage = new Menu();
+    //         homePage.setVisible(true);
+    //     });
+    // }
 }

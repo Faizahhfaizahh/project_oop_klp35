@@ -64,7 +64,7 @@ public class Registrasi extends JFrame {
         JButton backButton = createStyledButton("Back to Login", new Color(200, 200, 200), Color.BLACK);
         backButton.addActionListener(e -> {
             dispose(); // Close registration form
-            new Login().setVisible(true); // Open login form
+            new Puzzle().openLogin(); // Open login form
         });
 
         // Add components to the formPanel
